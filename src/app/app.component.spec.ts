@@ -46,6 +46,21 @@ describe('AppComponent', () => {
         expect(resultado).toEqual("message::methodUno");
 
     })
+
+  it('#methodDos', () => {
+    let name = 'EM';
+    let lastname;
+    expect(name).toBeDefined();
+    expect(lastname).toBeUndefined();
+    expect(1 === 1).toBeTruthy();
+    expect(1 === 1 + 1).toBeFalsy();
+    expect(5).toBeLessThan(10);
+    expect(5).toBeGreaterThan(1);
+    expect('123456').toMatch(/12/);
+    expect(['a', 'b']).toContain('b');
+  })
+
+
 });
 
 
