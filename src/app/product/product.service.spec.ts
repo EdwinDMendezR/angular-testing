@@ -4,6 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { Product } from './product.model';
 import { environment } from '../environment';
 import { generateOneProduct } from './product.mock';
+import { HttpStatusCode } from '@angular/common/http';
 
 describe('Product Service', () => {
 
@@ -164,5 +165,46 @@ describe('Product Service', () => {
             request.flush(mockData)
         });
     })
+
+    describe('ProductService::exceptionExample', () => {
+        it('post', (doneFunction) => {
+            const mockData = true;
+            const productId = '1';
+            productService.exceptionExample('1')
+                .subscribe(response => {
+                    expect(response).toEqual(mockData);
+                });
+            doneFunction();
+            // Mock
+            const url = `${environment.API_URL}/api/products/${productId}`;
+            const request = httpTestingController.expectOne(url);
+            expect(request.request.method).toEqual('DELETE');
+            request.flush(mockData)
+        });
+    })
+
+    describe('ProductService::exceptionExample::Conflict', () => {
+        it('post', (doneFunction) => {
+            const mockData = true;
+            const errorMessage = '404 Error Message';
+            const mockError = {
+                status: HttpStatusCode.Conflict,
+                statusText: errorMessage
+            }
+
+            const productId = '1';
+            productService.exceptionExample('1')
+                .subscribe(null, (error) => {
+                    expect(error).toEqual('HttpStatusCode::Conflict');
+                });
+            doneFunction();
+            // Mock
+            const url = `${environment.API_URL}/api/products/${productId}`;
+            const request = httpTestingController.expectOne(url);
+            expect(request.request.method).toEqual('DELETE');
+            request.flush(errorMessage, mockError)
+        });
+    })
+
 
 });

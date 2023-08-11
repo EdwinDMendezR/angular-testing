@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../environment";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode } from "@angular/common/http";
 import { Product } from "./product.model";
-import { map, retry } from "rxjs/operators";
+import { catchError, map, retry } from "rxjs/operators";
+import { throwError } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -48,6 +49,24 @@ export class ProductsService {
 
     deleteExample(id: String) {
         return this.http.delete<boolean>(`${this.apiUrl}/${id}`)
+    }
+
+    exceptionExample(id: String) {
+        return this.http.delete<boolean>(`${this.apiUrl}/${id}`)
+            .pipe(
+                catchError( (error: HttpErrorResponse) => {
+                    if(error.status === HttpStatusCode.Conflict) {
+                        return throwError(() => 'HttpStatusCode::Conflict');
+                    }
+                    if(error.status === HttpStatusCode.NotFound) {
+                        return throwError(() => 'HttpStatusCode::NotFound');
+                    }
+                    if(error.status === HttpStatusCode.Unauthorized) {
+                        return throwError(() => 'HttpStatusCode::Unauthorized');
+                    }
+                    return throwError(() => 'DefaultError');
+                })
+            )
     }
 
 }
