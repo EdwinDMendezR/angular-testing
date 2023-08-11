@@ -15,7 +15,19 @@ fdescribe('ComposeService', () => {
   });
 
   it('ComposeService::compose_function', () => {
-    expect(service.compose_function(2)).toEqual('3');
+    expect(service.compose_function_hard_code(2)).toEqual('3');
+  });
+
+  it('ComposeService::compose_function', () => {
+    expect(service.compose_function(5)).toEqual('6');
+  });
+
+  it('ComposeService::compose_function_a', () => {
+    expect(service.compose_function_a(5)).toEqual('6');
+  });
+
+  it('ComposeService::compose_function_a', () => {
+    expect(service.compose_function_b(5)).toEqual('6');
   });
 
 });
