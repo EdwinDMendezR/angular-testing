@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ComposeService } from './compose.service';
 
-fdescribe('ComposeService', () => {
+describe('ComposeService', () => {
   let service: ComposeService;
 
   beforeEach(() => {
