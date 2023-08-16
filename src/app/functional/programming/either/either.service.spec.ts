@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { EitherService } from './either.service';
 
-fdescribe('EitherService', () => {
+describe('EitherService', () => {
   let service: EitherService;
 
   beforeEach(() => {
