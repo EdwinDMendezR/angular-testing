@@ -1,26 +1,42 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ComponentaComponent } from './componenta.component';
 import { ProductComponent } from '../product/product.component';
 import { Product } from '../product/product.model';
 import { By } from '@angular/platform-browser';
+import { ProductsService } from '../product/product.service';
+import { generateOneProduct } from '../product/product.mock';
+import { of } from 'rxjs';
 
 describe('ComponentaComponent', () => {
   let component: ComponentaComponent;
   let fixture: ComponentFixture<ComponentaComponent>;
-  let httpTestingController: HttpTestingController;
+  let productsService: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async () => {
+    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getExampleService', 'getExampleParams'])
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [ ComponentaComponent, ProductComponent ]
+      declarations: [ ComponentaComponent, ProductComponent ],
+      providers: [
+        { provide: ProductsService, useValue: productsServiceSpy }
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ComponentaComponent);
-    httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
+    productsService = TestBed.inject(ProductsService) as jasmine.SpyObj<ProductsService>;
+    const mockData: Product[] = [
+      {
+          ...generateOneProduct(),
+          id: '1'
+      },
+      {
+          ...generateOneProduct(),
+          id: '2'
+      }
+    ];
+    productsService.getExampleService.and.returnValue(of(mockData));
     fixture.detectChanges();
   });
 
@@ -58,6 +74,19 @@ describe('ComponentaComponent', () => {
 
   });
 
+  it('ProductsService::getExampleService', () => {
+    expect(productsService.getExampleService).toHaveBeenCalled();
+  });
+
+  it('ProductsService::getExampleService', () => {
+     // Arrange
+
+     
+     // Act
+
+     // Assert
+
+  });
 
 
 });

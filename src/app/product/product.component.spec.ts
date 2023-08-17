@@ -1,26 +1,48 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { ProductComponent } from './product.component';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Product } from './product.model';
+import { ProductsService } from './product.service';
+import { generateOneProduct } from './product.mock';
+import { of, defer } from 'rxjs';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
   let httpTestingController: HttpTestingController;
+  let productsService: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async () => {
+    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getExampleService', 'getExampleParams'])
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      declarations: [ ProductComponent ]
+      declarations: [ ProductComponent ],
+      providers: [
+        { provide: ProductsService, useValue: productsServiceSpy }
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(ProductComponent);
     httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
+    productsService = TestBed.inject(ProductsService) as jasmine.SpyObj<ProductsService>;
+
+    const mockData: Product[] = [
+      {
+          ...generateOneProduct(),
+          id: '1'
+      },
+      {
+          ...generateOneProduct(),
+          id: '2'
+      }
+    ];
+    productsService.getExampleService.and.returnValue(of(mockData));
+
     fixture.detectChanges();
   });
 
@@ -98,7 +120,6 @@ describe('ProductComponent', () => {
     expect(messageButton.textContent).toEqual('Mensage: Mensaje-Click');
   });
 
-
   it('component::actionOutPutClick', () => {
     // Arrange
     const expectPErson = new Product('idValue', 'nameValue') 
@@ -118,8 +139,100 @@ describe('ProductComponent', () => {
     expect(product_output).toEqual(expectPErson);
   });
 
+  it('ProductComponent::getAllProductsPaginacion', () => {
+    // Arrange
+    const mockDataDos: Product[] = [
+      {
+          ...generateOneProduct(),
+          id: '1'
+      },
+      {
+          ...generateOneProduct(),
+          id: '2'
+      },
+      {
+          ...generateOneProduct(),
+          id: '3'
+      },
+      {
+          ...generateOneProduct(),
+          id: '4'
+      }
+    ];
+    productsService.getExampleParams.and.returnValue(of(mockDataDos));
+    const countPrev = component.products.length
+    
+    // Act
+    component.getAllProductsPaginacion();
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.status).toEqual('success');
+  })
+
+  it('ProductComponent::getAllProductsPaginacion::Defer', fakeAsync(() => {
+    // Arrange
+    const mockDataDos: Product[] = [
+      {
+          ...generateOneProduct(),
+          id: '1'
+      },
+      {
+          ...generateOneProduct(),
+          id: '2'
+      },
+      {
+          ...generateOneProduct(),
+          id: '3'
+      },
+      {
+          ...generateOneProduct(),
+          id: '4'
+      }
+    ];
+    productsService.getExampleParams.and.returnValue(defer(() => Promise.resolve(mockDataDos) ));
+    const countPrev = component.products.length
+    
+    // Act
+    component.getAllProductsPaginacion();
+    fixture.detectChanges();
+    expect(component.status).toEqual('loading');
+
+    tick(); // ejecutar todo lo que este pendinete -> promise, exec, obs, setTiemout [Asincrono] -> requiere fakeasync
+    fixture.detectChanges();
+    // Assert
+    expect(component.status).toEqual('success');
+  }));
+
+
+  it('ProductComponent::getAllProductsPaginacion::Defer::SetTimeOut', fakeAsync(() => {
+    // Arrange
+    productsService.getExampleParams.and.returnValue(defer(() => Promise.reject('error')));
+    const countPrev = component.products.length
+    
+    // Act
+    component.getAllProductsPaginacion();
+    fixture.detectChanges();
+    expect(component.status).toEqual('loading');
+
+    tick(4000); // ejecutar todo lo que este pendinete -> promise, exec, obs, setTiemout [Asincrono] -> requiere fakeasync
+    fixture.detectChanges();
+    // Assert
+    expect(component.status).toEqual('error');
+  }));
+
+
 
 });
+
+
+
+
+
+
+
+
+
 
 @Component({
   template: `<app-product [product]="product" ></app-product>`

@@ -13,18 +13,42 @@ export class ProductComponent implements OnInit {
   @Output() outputProduct = new EventEmitter<Product>();
   mensaje = '';
   products: Product[] = [];
+  limit = 10;
+  offset = 0;
+  status: 'loading' | 'success' | 'error' | 'init' = 'init';
 
   constructor(private productService: ProductsService) {
   }
 
   ngOnInit(): void {
     this.getAllProducts();
+    //this.getAllProductsPaginacion();
   }
 
   getAllProducts() {
     this.productService.getExampleService()
     .subscribe(products => {
       this.products = products;
+    })
+  }
+
+  getAllProductsPaginacion() {
+    this.status = 'loading';
+    this.productService.getExampleParams(this.limit, this.offset)
+    .subscribe({
+      next: (products) => {
+        this.products = [...this.products, ...products]
+        this.offset += this.limit;
+        this.status = 'success';  
+      },
+      error: error => {
+        //this.products = [];
+        //this.status = 'error';
+        setTimeout(() => {
+          this.products = [];
+          this.status = 'error';
+        }, 3000);
+      }
     })
   }
 
