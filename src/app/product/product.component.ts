@@ -16,6 +16,7 @@ export class ProductComponent implements OnInit {
   limit = 10;
   offset = 0;
   status: 'loading' | 'success' | 'error' | 'init' = 'init';
+  respuesta= '';
 
   constructor(private productService: ProductsService) {
   }
@@ -44,7 +45,7 @@ export class ProductComponent implements OnInit {
       error: error => {
         //this.products = [];
         //this.status = 'error';
-        setTimeout(() => {
+        setTimeout(() => { // no se recomienta setTimeout
           this.products = [];
           this.status = 'error';
         }, 3000);
@@ -58,6 +59,11 @@ export class ProductComponent implements OnInit {
 
   actionOutPutClick() {
     this.outputProduct.emit(this.product) 
+  }
+
+  async callPromise() {
+    const respuesta = await this.productService.getPromiseValue();
+    this.respuesta = respuesta;
   }
 
 }

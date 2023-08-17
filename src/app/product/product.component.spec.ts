@@ -12,13 +12,13 @@ import { of, defer } from 'rxjs';
 describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
-  let httpTestingController: HttpTestingController;
   let productsService: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async () => {
-    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getExampleService', 'getExampleParams'])
+    const productsServiceSpy = jasmine.createSpyObj('ProductsService', 
+      ['getExampleService', 'getExampleParams', 'getPromiseValue']
+    );
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       declarations: [ ProductComponent ],
       providers: [
         { provide: ProductsService, useValue: productsServiceSpy }
@@ -27,7 +27,6 @@ describe('ProductComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(ProductComponent);
-    httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
     productsService = TestBed.inject(ProductsService) as jasmine.SpyObj<ProductsService>;
 
@@ -222,15 +221,23 @@ describe('ProductComponent', () => {
   }));
 
 
+  it('ProductComponent::callPromise', fakeAsync(() => {
+    // Arrange
+    productsService.getPromiseValue.and.returnValue(Promise.resolve('Mock Value'))
+
+    // Act
+    component.callPromise();
+    tick();
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.respuesta).toEqual('Mock Value');
+
+  }));
+
+
 
 });
-
-
-
-
-
-
-
 
 
 

@@ -206,5 +206,10 @@ describe('Product Service', () => {
         });
     })
 
+    it('ProductsService:', async () => {
+        const respuesta = await productService.getPromiseValue();
+        expect(respuesta).toEqual('Promise Value');
+    });
+
 
 });

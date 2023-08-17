@@ -69,4 +69,8 @@ export class ProductsService {
             )
     }
 
+    getPromiseValue() {
+        return Promise.resolve('Promise Value');
+    }
+
 }

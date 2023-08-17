@@ -78,15 +78,4 @@ describe('ComponentaComponent', () => {
     expect(productsService.getExampleService).toHaveBeenCalled();
   });
 
-  it('ProductsService::getExampleService', () => {
-     // Arrange
-
-     
-     // Act
-
-     // Assert
-
-  });
-
-
 });
