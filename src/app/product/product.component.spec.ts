@@ -236,6 +236,22 @@ describe('ProductComponent', () => {
   }));
 
 
+  it('ProductComponent::callPromise::Button', fakeAsync(() => {
+    // Arrange
+    productsService.getPromiseValue.and.returnValue(Promise.resolve('Mock Value'))
+    const button = fixture.debugElement.query(By.css('.btn-promise'))
+
+    // Act
+    button.triggerEventHandler('click', null)
+    tick();
+    fixture.detectChanges();
+    const p_respuesta = fixture.debugElement.query(By.css('.p-respuesta'))
+
+    // Assert
+    expect(component.respuesta).toEqual('Mock Value');
+    expect(p_respuesta.nativeElement.textContent).toEqual('Mock Value');
+
+  }));
 
 });
 
