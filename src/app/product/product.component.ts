@@ -10,7 +10,7 @@ import { Product } from './product.model';
 export class ProductComponent implements OnInit {
 
   @Input() product: Product = new Product('', '');
-  @Output() output = new EventEmitter<Product>();
+  @Output() outputProduct = new EventEmitter<Product>();
   mensaje = '';
   products: Product[] = [];
 
@@ -33,8 +33,7 @@ export class ProductComponent implements OnInit {
   }
 
   actionOutPutClick() {
-    this.output.emit(this.product) 
+    this.outputProduct.emit(this.product) 
   }
-
 
 }

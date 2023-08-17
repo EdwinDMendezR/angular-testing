@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProductComponent } from './product.component';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Product } from './product.model';
 
-fdescribe('ProductComponent', () => {
+describe('ProductComponent', () => {
   let component: ProductComponent;
   let fixture: ComponentFixture<ProductComponent>;
   let httpTestingController: HttpTestingController;
@@ -106,7 +106,7 @@ fdescribe('ProductComponent', () => {
     const button = fixture.debugElement.query(By.css('button.btn-output-testing'));
 
     let product_output : Product | undefined;
-    component.output.subscribe(person => {
+    component.outputProduct.subscribe(person => {
       product_output = person;
     })
 
@@ -118,5 +118,56 @@ fdescribe('ProductComponent', () => {
     expect(product_output).toEqual(expectPErson);
   });
 
+
+});
+
+@Component({
+  template: `<app-product [product]="product" ></app-product>`
+})
+class HostComponent {
+  product = new Product('idValue', 'nameValue');
+}
+
+describe('ProductComponent::HostComponent', () => {
+  let component: HostComponent;
+  let fixture: ComponentFixture<HostComponent>;
+  let httpTestingController: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      declarations: [ HostComponent, ProductComponent ]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(HostComponent);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('HostComponent::input', () => {
+    // Arrange
+    const id_value_debug_element = fixture.debugElement.query(By.css('app-product h1'))
+    const id_value_native_elemente = id_value_debug_element.nativeElement;
+    // Act
+    fixture.detectChanges();
+    // Assert
+    expect(id_value_native_elemente.textContent).toEqual('Id: idValue');
+  });
+
+  it('HostComponent::input', () => {
+    // Arrange
+    const id_value_debug_element = fixture.debugElement.query(By.css('app-product h1'))
+    const id_value_native_elemente = id_value_debug_element.nativeElement;
+    // Act
+    fixture.detectChanges();
+    // Assert
+    expect(id_value_native_elemente.textContent).toEqual('Id: idValue');
+  });
 
 });

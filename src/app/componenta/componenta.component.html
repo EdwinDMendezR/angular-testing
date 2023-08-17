@@ -1,0 +1,10 @@
+<p>componenta works!</p>
+<h3>Count ({{products.length}})</h3>
+<p>***********************************************</p>
+<h1>Id: {{outputProduct?.id}}</h1>
+<h1>Nombre: {{outputProduct?.name}}</h1>
+<p>***********************************************</p>
+<app-product *ngFor="let product of products"
+    [product]="product"
+    (outputProduct)="choose(product)"
+></app-product>
