@@ -8,7 +8,7 @@ import { Product } from './product.model';
 import { ProductsService } from './product.service';
 import { generateOneProduct } from './product.mock';
 import { PipesPipe } from '../pipes/pipes.pipe';
-import { asyncData, asyncError, mockObservable, mockPromise } from 'src/testing';
+import { asyncData, asyncError, mockObservable, mockPromise, query, queryById } from 'src/testing';
 
 
 describe('ProductComponent', () => {
@@ -99,7 +99,7 @@ describe('ProductComponent', () => {
 
   it('product.component.html::button', () => {
     // Arrange
-    const button = fixture.debugElement.query(By.css('button.btn-testing')).nativeElement;
+    const button = queryById(fixture, 'btn-testing').nativeElement;
 
     // Act
     component.actionClick();
@@ -111,7 +111,7 @@ describe('ProductComponent', () => {
 
   it('product.component.html::button', () => {
     // Arrange
-    const button = fixture.debugElement.query(By.css('button.btn-testing'));
+    const button = queryById(fixture,'btn-testing');
     const messageButton = button.nativeElement;
 
     // Act
@@ -126,7 +126,7 @@ describe('ProductComponent', () => {
     // Arrange
     const expectPErson = new Product('idValue', 'nameValue') 
     component.product = expectPErson;
-    const button = fixture.debugElement.query(By.css('button.btn-output-testing'));
+    const button = query(fixture, 'button.btn-output-testing');
 
     let product_output : Product | undefined;
     component.outputProduct.subscribe(person => {
@@ -242,13 +242,13 @@ describe('ProductComponent', () => {
   it('ProductComponent::callPromise::Button', fakeAsync(() => {
     // Arrange
     productsService.getPromiseValue.and.returnValue(Promise.resolve('Mock Value'))
-    const button = fixture.debugElement.query(By.css('.btn-promise'))
+    const button = query(fixture, '.btn-promise');
 
     // Act
     button.triggerEventHandler('click', null)
     tick();
     fixture.detectChanges();
-    const p_respuesta = fixture.debugElement.query(By.css('.p-respuesta'))
+    const p_respuesta = query(fixture, '.p-respuesta')
 
     // Assert
     expect(component.respuesta).toEqual('Mock Value');
@@ -258,7 +258,7 @@ describe('ProductComponent', () => {
 
   it('Pipes', () => {
     // Arrange
-    const p_respuesta = fixture.debugElement.query(By.css('.pipe-clase'))
+    const p_respuesta = query(fixture, '.pipe-clase');
 
     // Act
     // Assert
@@ -301,7 +301,7 @@ describe('ProductComponent::HostComponent', () => {
 
   it('HostComponent::input', () => {
     // Arrange
-    const id_value_debug_element = fixture.debugElement.query(By.css('app-product h1'))
+    const id_value_debug_element = query(fixture, 'app-product h1');
     const id_value_native_elemente = id_value_debug_element.nativeElement;
     // Act
     fixture.detectChanges();
@@ -311,7 +311,7 @@ describe('ProductComponent::HostComponent', () => {
 
   it('HostComponent::input', () => {
     // Arrange
-    const id_value_debug_element = fixture.debugElement.query(By.css('app-product h1'))
+    const id_value_debug_element = query(fixture, 'app-product h1');
     const id_value_native_elemente = id_value_debug_element.nativeElement;
     // Act
     fixture.detectChanges();

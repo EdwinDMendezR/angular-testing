@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { HighlgthDirective } from './highlgth.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { queryAll, queryAllByDirective } from 'src/testing';
 
 
 @Component({
@@ -41,22 +41,22 @@ describe('HighlgthDirective', () => {
   });
 
   it('By.css(*[highlight])', () => {
-    const elements = fixture.debugElement.queryAll(By.css('*[highlight]'));
+    const elements = queryAll(fixture,'*[highlight]');
     expect(elements.length).toEqual(4);
   });
 
   it('By.directive(HighlgthDirective)', () => {
-    const elements = fixture.debugElement.queryAll(By.directive(HighlgthDirective));
+    const elements = queryAllByDirective(fixture, HighlgthDirective);
     expect(elements.length).toEqual(4);
   });
 
   it('*:not([highlight])', () => {
-    const elements = fixture.debugElement.queryAll(By.css('*:not([highlight])'));
+    const elements = queryAll(fixture,'*:not([highlight])');
     expect(elements.length).toEqual(0);
   });
 
   it('By.directive(HighlgthDirective)::ValidaColor', () => {
-    const elements = fixture.debugElement.queryAll(By.directive(HighlgthDirective));
+    const elements = queryAllByDirective(fixture, HighlgthDirective);
     expect(elements[0].nativeElement.style.backgroundColor).toEqual('gray')
     expect(elements[1].nativeElement.style.backgroundColor).toEqual('yellow')
     expect(elements[2].nativeElement.style.backgroundColor).toEqual('gray')
