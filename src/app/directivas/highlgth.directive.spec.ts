@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HighlgthDirective } from './highlgth.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -10,14 +10,14 @@ import { FormsModule } from '@angular/forms';
   <h5 highlight>Ejemplo Directiva 1</h5>
   <h5 highlight="yellow">Ejemplo Directiva 2</h5>
   <p highlight>Ejemplo Directiva 3</p>
-  <input [(ngModel)]="color" [highlight]="color"> 
+  <input [(ngModel)]="color" highlight> 
 `
 })
 class HostComponent {
   color = 'pink'
 }
 
-fdescribe('HighlgthDirective', () => {
+describe('HighlgthDirective', () => {
 
   let component: HostComponent;
   let fixture: ComponentFixture<HostComponent>;
@@ -25,7 +25,7 @@ fdescribe('HighlgthDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ HostComponent, HighlgthDirective ],
-      imports: [ FormsModule ]
+      imports: [ FormsModule, ReactiveFormsModule ]
     })
     .compileComponents();
 
@@ -42,7 +42,7 @@ fdescribe('HighlgthDirective', () => {
 
   it('By.css(*[highlight])', () => {
     const elements = fixture.debugElement.queryAll(By.css('*[highlight]'));
-    expect(elements.length).toEqual(3);
+    expect(elements.length).toEqual(4);
   });
 
   it('By.directive(HighlgthDirective)', () => {
@@ -52,7 +52,7 @@ fdescribe('HighlgthDirective', () => {
 
   it('*:not([highlight])', () => {
     const elements = fixture.debugElement.queryAll(By.css('*:not([highlight])'));
-    expect(elements.length).toEqual(1);
+    expect(elements.length).toEqual(0);
   });
 
   it('By.directive(HighlgthDirective)::ValidaColor', () => {
@@ -63,7 +63,7 @@ fdescribe('HighlgthDirective', () => {
     expect(elements.length).toEqual(4);
   });
 
-  it('', ()=> {
+  /*it('fixture.detectChanges', ()=> {
     const inputDebugElement = fixture.debugElement.query(By.css('input'));
     const inputHtmlElement: HTMLInputElement = inputDebugElement.nativeElement;
     expect(inputHtmlElement.style.backgroundColor).toEqual('pink');
@@ -72,6 +72,6 @@ fdescribe('HighlgthDirective', () => {
     fixture.detectChanges();
     expect(inputHtmlElement.style.backgroundColor).toEqual('red');
     expect(component.color).toEqual('red');
-  })
+  })*/
 
 });

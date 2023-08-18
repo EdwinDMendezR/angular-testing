@@ -8,6 +8,7 @@ import { Product } from './product.model';
 import { ProductsService } from './product.service';
 import { generateOneProduct } from './product.mock';
 import { of, defer } from 'rxjs';
+import { PipesPipe } from '../pipes/pipes.pipe';
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
@@ -19,7 +20,7 @@ describe('ProductComponent', () => {
       ['getExampleService', 'getExampleParams', 'getPromiseValue']
     );
     await TestBed.configureTestingModule({
-      declarations: [ ProductComponent ],
+      declarations: [ ProductComponent, PipesPipe ],
       providers: [
         { provide: ProductsService, useValue: productsServiceSpy }
       ]
@@ -253,6 +254,16 @@ describe('ProductComponent', () => {
 
   }));
 
+  it('Pipes', () => {
+    // Arrange
+    const p_respuesta = fixture.debugElement.query(By.css('.pipe-clase'))
+
+    // Act
+    // Assert
+    expect(p_respuesta.nativeElement.textContent).toEqual('epiP gnitseT');
+  });
+
+
 });
 
 
@@ -272,7 +283,7 @@ describe('ProductComponent::HostComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      declarations: [ HostComponent, ProductComponent ]
+      declarations: [ HostComponent, ProductComponent, PipesPipe ]
     })
     .compileComponents();
 

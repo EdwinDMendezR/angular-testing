@@ -7,6 +7,8 @@ import { By } from '@angular/platform-browser';
 import { ProductsService } from '../product/product.service';
 import { generateOneProduct } from '../product/product.mock';
 import { of } from 'rxjs';
+import { PipesPipe } from '../pipes/pipes.pipe';
+
 
 describe('ComponentaComponent', () => {
   let component: ComponentaComponent;
@@ -16,7 +18,7 @@ describe('ComponentaComponent', () => {
   beforeEach(async () => {
     const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getExampleService', 'getExampleParams'])
     await TestBed.configureTestingModule({
-      declarations: [ ComponentaComponent, ProductComponent ],
+      declarations: [ ComponentaComponent, ProductComponent, PipesPipe ],
       providers: [
         { provide: ProductsService, useValue: productsServiceSpy }
       ]

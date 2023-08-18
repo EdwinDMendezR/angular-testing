@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DirectivasComponent } from './directivas.component';
 import { By } from '@angular/platform-browser';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
 
 describe('DirectivasComponent', () => {
   let component: DirectivasComponent;
@@ -9,7 +11,8 @@ describe('DirectivasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DirectivasComponent ]
+      declarations: [ DirectivasComponent ],
+      imports: [ FormsModule, ReactiveFormsModule ]
     })
     .compileComponents();
     fixture = TestBed.createComponent(DirectivasComponent);

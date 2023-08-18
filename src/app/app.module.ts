@@ -10,6 +10,7 @@ import { ProgrammingComponent } from './functional/programming/programming.compo
 import { ComponentaComponent } from './componenta/componenta.component';
 import { DirectivasComponent } from './directivas/directivas.component';
 import { HighlgthDirective } from './directivas/highlgth.directive';
+import { PipesPipe } from './pipes/pipes.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HighlgthDirective } from './directivas/highlgth.directive';
     ProgrammingComponent,
     ComponentaComponent,
     DirectivasComponent,
-    HighlgthDirective
+    HighlgthDirective,
+    PipesPipe
   ],
   imports: [
     BrowserModule,
