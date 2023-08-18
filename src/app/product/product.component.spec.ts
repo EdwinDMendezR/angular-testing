@@ -7,8 +7,9 @@ import { By } from '@angular/platform-browser';
 import { Product } from './product.model';
 import { ProductsService } from './product.service';
 import { generateOneProduct } from './product.mock';
-import { of, defer } from 'rxjs';
 import { PipesPipe } from '../pipes/pipes.pipe';
+import { asyncData, asyncError, mockObservable, mockPromise } from 'src/testing';
+
 
 describe('ProductComponent', () => {
   let component: ProductComponent;
@@ -16,6 +17,7 @@ describe('ProductComponent', () => {
   let productsService: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async () => {
+    mockPromise
     const productsServiceSpy = jasmine.createSpyObj('ProductsService', 
       ['getExampleService', 'getExampleParams', 'getPromiseValue']
     );
@@ -41,7 +43,7 @@ describe('ProductComponent', () => {
           id: '2'
       }
     ];
-    productsService.getExampleService.and.returnValue(of(mockData));
+    productsService.getExampleService.and.returnValue(mockObservable(mockData));
 
     fixture.detectChanges();
   });
@@ -159,7 +161,7 @@ describe('ProductComponent', () => {
           id: '4'
       }
     ];
-    productsService.getExampleParams.and.returnValue(of(mockDataDos));
+    productsService.getExampleParams.and.returnValue(mockObservable(mockDataDos));
     const countPrev = component.products.length
     
     // Act
@@ -190,7 +192,7 @@ describe('ProductComponent', () => {
           id: '4'
       }
     ];
-    productsService.getExampleParams.and.returnValue(defer(() => Promise.resolve(mockDataDos) ));
+    productsService.getExampleParams.and.returnValue(asyncData(mockDataDos));
     const countPrev = component.products.length
     
     // Act
@@ -207,7 +209,7 @@ describe('ProductComponent', () => {
 
   it('ProductComponent::getAllProductsPaginacion::Defer::SetTimeOut', fakeAsync(() => {
     // Arrange
-    productsService.getExampleParams.and.returnValue(defer(() => Promise.reject('error')));
+    productsService.getExampleParams.and.returnValue(asyncError('error'));
     const countPrev = component.products.length
     
     // Act
