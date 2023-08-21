@@ -8,7 +8,7 @@ import { Product } from './product.model';
 import { ProductsService } from './product.service';
 import { generateOneProduct } from './product.mock';
 import { PipesPipe } from '../pipes/pipes.pipe';
-import { asyncData, asyncError, mockObservable, mockPromise, query, queryById } from 'src/testing';
+import { asyncData, asyncError, mockObservable, mockPromise, query, queryById, getText, getNativeElement } from 'src/testing';
 
 
 describe('ProductComponent', () => {
@@ -53,15 +53,12 @@ describe('ProductComponent', () => {
   });
 
   it('product.component.html::p', () => {
-    const productElement: HTMLElement = fixture.nativeElement;
-    const text = productElement.querySelector('p')
-    expect(text?.textContent).toEqual('product works!')
+    const text = getText(fixture, 'tittle')
+    expect(text).toEqual('product works!')
   });
 
   it('product.component.html::DebugElement', () => {
-    const debugElement: DebugElement = fixture.debugElement;
-    const pDebug: DebugElement = debugElement.query(By.css('p'));
-    const productElement: HTMLElement = pDebug.nativeElement;
+    const productElement: HTMLElement = getNativeElement(fixture, 'tittle');
     expect(productElement?.textContent).toEqual('product works!')
   });
 
@@ -74,37 +71,28 @@ describe('ProductComponent', () => {
 
   it('product.component.html::DebugElement', () => {
     // Arrange
-    component.product = new Product('idValue', 'nameValue');
-    const debugElement: DebugElement = fixture.debugElement;
-    const pDebug: DebugElement = debugElement.query(By.css('h1'));
-    const productElement: HTMLElement = pDebug.nativeElement;
-   
+    const productElement: HTMLElement = getNativeElement(fixture, 'id');
     // Act
     fixture.detectChanges();
-   
     // Assert
     expect(productElement?.textContent).toEqual(`Id: ${component.product.id}`)
   });
 
   it('component::actionClick', () => {
     // Arrange
-
     // Act
     component.actionClick();
     fixture.detectChanges();
-
     // Assert
     expect(component.mensaje).toEqual('Mensaje-Click');
   });
 
   it('product.component.html::button', () => {
     // Arrange
-    const button = queryById(fixture, 'btn-testing').nativeElement;
-
+    const button = getNativeElement(fixture, 'btn-testing');
     // Act
     component.actionClick();
     fixture.detectChanges();
-
     // Assert
     expect(button.textContent).toEqual('Mensage: Mensaje-Click');
   });
@@ -113,11 +101,9 @@ describe('ProductComponent', () => {
     // Arrange
     const button = queryById(fixture,'btn-testing');
     const messageButton = button.nativeElement;
-
     // Act
     button.triggerEventHandler('click', null);
     fixture.detectChanges();
-
     // Assert
     expect(messageButton.textContent).toEqual('Mensage: Mensaje-Click');
   });
@@ -318,5 +304,11 @@ describe('ProductComponent::HostComponent', () => {
     // Assert
     expect(id_value_native_elemente.textContent).toEqual('Id: idValue');
   });
+
+  it('Finder::error', () => {
+    expect(() => {
+      query(fixture, 'xxx');      
+    }).toThrowError('query: Element with xxx no existe');
+  }) 
 
 });
