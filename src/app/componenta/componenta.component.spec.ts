@@ -16,7 +16,13 @@ describe('ComponentaComponent', () => {
   let productsService: jasmine.SpyObj<ProductsService>;
 
   beforeEach(async () => {
-    const productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getExampleService', 'getExampleParams'])
+    const productsServiceSpy = jasmine.createSpyObj(
+      'ProductsService', 
+      [
+        'getExampleService', 
+        'getExampleParams'
+      ]
+    )
     await TestBed.configureTestingModule({
       declarations: [ ComponentaComponent, ProductComponent, PipesPipe ],
       providers: [

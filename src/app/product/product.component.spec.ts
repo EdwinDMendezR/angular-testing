@@ -8,7 +8,8 @@ import { Product } from './product.model';
 import { ProductsService } from './product.service';
 import { generateOneProduct } from './product.mock';
 import { PipesPipe } from '../pipes/pipes.pipe';
-import { asyncData, asyncError, mockObservable, mockPromise, query, queryById, getText, getNativeElement } from 'src/testing';
+import { asyncData, asyncError, mockObservable, mockPromise, 
+         query, queryById, getText, getNativeElement, clickEvent } from 'src/testing';
 
 
 describe('ProductComponent', () => {
@@ -102,7 +103,7 @@ describe('ProductComponent', () => {
     const button = queryById(fixture,'btn-testing');
     const messageButton = button.nativeElement;
     // Act
-    button.triggerEventHandler('click', null);
+    clickEvent(fixture, 'btn-testing', true);
     fixture.detectChanges();
     // Assert
     expect(messageButton.textContent).toEqual('Mensage: Mensaje-Click');
@@ -120,7 +121,7 @@ describe('ProductComponent', () => {
     })
 
     // Act
-    button.triggerEventHandler('click', null);
+    clickEvent(fixture, 'button.btn-output-testing')
     fixture.detectChanges();
 
     // Assert
@@ -228,10 +229,9 @@ describe('ProductComponent', () => {
   it('ProductComponent::callPromise::Button', fakeAsync(() => {
     // Arrange
     productsService.getPromiseValue.and.returnValue(Promise.resolve('Mock Value'))
-    const button = query(fixture, '.btn-promise');
 
     // Act
-    button.triggerEventHandler('click', null)
+    clickEvent(fixture, '.btn-promise');
     tick();
     fixture.detectChanges();
     const p_respuesta = query(fixture, '.p-respuesta')
